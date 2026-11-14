@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: cotizacion
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+
+server:
+  port: 8080

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TecnoSoporte – Nueva Cotización</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+            padding: 40px;
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: #1a56db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: #334155;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            color: #1e293b;
+            background: #f8fafc;
+            transition: border-color 0.2s;
+            outline: none;
+        }
+
+        input:focus, select:focus {
+            border-color: #1a56db;
+            background: #fff;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 0.8rem;
+            margin-top: 4px;
+        }
+
+        .hint {
+            color: #6b7280;
+            font-size: 0.78rem;
+            margin-top: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #1a56db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 8px;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background: #1648c0;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="logo">
+        <div class="logo-icon">🖥</div>
+        <div>
+            <h1>TecnoSoporte</h1>
+            <p>Sistema de Cotización de Servicios</p>
+        </div>
+    </div>
+
+    <h2>Nueva Cotización</h2>
+
+    <form th:action="@{/cotizar}" th:object="${cotizacionRequest}" method="post">
+
+        <!-- Nombre del cliente -->
+        <div class="form-group">
+            <label for="nombreCliente">Nombre del cliente</label>
+            <input type="text" id="nombreCliente" th:field="*{nombreCliente}"
+                   placeholder="Ej. Juan Pérez"/>
+            <span class="error" th:if="${#fields.hasErrors('nombreCliente')}"
+                  th:errors="*{nombreCliente}"></span>
+        </div>
+
+        <!-- Servicio técnico -->
+        <div class="form-group">
+            <label for="servicio">Servicio técnico</label>
+            <select id="servicio" th:field="*{servicio}">
+                <option value="">-- Seleccione un servicio --</option>
+                <option th:each="s : ${servicios}" th:value="${s}" th:text="${s}"></option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('servicio')}"
+                  th:errors="*{servicio}"></span>
+        </div>
+
+        <!-- Cantidad -->
+        <div class="form-group">
+            <label for="cantidad">Cantidad</label>
+            <input type="number" id="cantidad" th:field="*{cantidad}"
+                   min="1" max="5" placeholder="1 – 5"/>
+            <span class="hint">Mínimo 1, máximo 5 unidades.</span>
+            <span class="error" th:if="${#fields.hasErrors('cantidad')}"
+                  th:errors="*{cantidad}"></span>
+        </div>
+
+        <!-- Tipo de cliente -->
+        <div class="form-group">
+            <label for="tipoCliente">Tipo de cliente</label>
+            <select id="tipoCliente" th:field="*{tipoCliente}">
+                <option value="">-- Seleccione el tipo --</option>
+                <option value="NUEVO">Nuevo (0 % descuento)</option>
+                <option value="FRECUENTE">Frecuente (10 % descuento)</option>
+                <option value="INSTITUCIONAL">Institucional (15 % descuento)</option>
+            </select>
+            <span class="error" th:if="${#fields.hasErrors('tipoCliente')}"
+                  th:errors="*{tipoCliente}"></span>
+        </div>
+
+        <button type="submit">Calcular cotización →</button>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>TecnoSoporte – Resultado de Cotización</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f4f8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+            padding: 40px;
+            width: 100%;
+            max-width: 540px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .logo-icon {
+            width: 44px;
+            height: 44px;
+            background: #1a56db;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .logo p {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-top: 2px;
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #15803d;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            color: #334155;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 12px 14px;
+        }
+
+        .info-item .label {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: 4px;
+        }
+
+        .info-item .value {
+            font-size: 0.95rem;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        .info-item.full {
+            grid-column: span 2;
+        }
+
+        h3 {
+            font-size: 0.95rem;
+            color: #334155;
+            margin-bottom: 12px;
+            font-weight: 700;
+        }
+
+        .totales {
+            border: 1.5px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .totales-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e2e8f0;
+            color: #374151;
+        }
+
+        .totales-row:last-child {
+            border-bottom: none;
+        }
+
+        .totales-row.total-final {
+            background: #1a56db;
+            color: white;
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .totales-row .descuento-pct {
+            font-size: 0.78rem;
+            background: #fef9c3;
+            color: #92400e;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .totales-row.sin-descuento .descuento-pct {
+            background: #f1f5f9;
+            color: #64748b;
+        }
+
+        .actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 11px;
+            background: #1a56db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+
+        .btn-primary:hover { background: #1648c0; }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 11px;
+            background: white;
+            color: #374151;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            transition: background 0.2s;
+        }
+
+        .btn-secondary:hover { background: #f1f5f9; }
+    </style>
+</head>
+<body>
+<div class="card">
+    <div class="logo">
+        <div class="logo-icon">🖥</div>
+        <div>
+            <h1>TecnoSoporte</h1>
+            <p>Sistema de Cotización de Servicios</p>
+        </div>
+    </div>
+
+    <span class="badge-success">✓ Cotización generada</span>
+
+    <h2>Resumen de Cotización</h2>
+
+    <!-- Datos del cliente y servicio -->
+    <div class="info-grid">
+        <div class="info-item full">
+            <div class="label">Cliente</div>
+            <div class="value" th:text="${resultado.nombreCliente}">—</div>
+        </div>
+        <div class="info-item">
+            <div class="label">Tipo de cliente</div>
+            <div class="value" th:text="${resultado.tipoCliente}">—</div>
+        </div>
+        <div class="info-item">
+            <div class="label">Cantidad</div>
+            <div class="value" th:text="${resultado.cantidad}">—</div>
+        </div>
+        <div class="info-item full">
+            <div class="label">Servicio</div>
+            <div class="value" th:text="${resultado.servicio}">—</div>
+        </div>
+        <div class="info-item">
+            <div class="label">Precio unitario</div>
+            <div class="value" th:text="'S/ ' + ${#numbers.formatDecimal(resultado.precioUnitario, 1, 2)}">—</div>
+        </div>
+    </div>
+
+    <!-- Cálculo de totales -->
+    <h3>Detalle de importes</h3>
+    <div class="totales">
+        <div class="totales-row">
+            <span>Subtotal</span>
+            <span th:text="'S/ ' + ${#numbers.formatDecimal(resultado.subtotal, 1, 2)}">—</span>
+        </div>
+        <div class="totales-row"
+             th:classappend="${resultado.porcentajeDescuento == 0} ? 'sin-descuento' : ''">
+            <span>
+                Descuento
+                <span class="descuento-pct"
+                      th:text="${#numbers.formatDecimal(resultado.porcentajeDescuento, 1, 0)} + ' %'">0 %</span>
+            </span>
+            <span th:text="'− S/ ' + ${#numbers.formatDecimal(resultado.importeDescuento, 1, 2)}">—</span>
+        </div>
+        <div class="totales-row total-final">
+            <span>Total a pagar</span>
+            <span th:text="'S/ ' + ${#numbers.formatDecimal(resultado.total, 1, 2)}">—</span>
+        </div>
+    </div>
+
+    <div class="actions">
+        <a href="/" class="btn-primary">Nueva cotización</a>
+        <a href="javascript:window.print()" class="btn-secondary">Imprimir</a>
+    </div>
+</div>
+</body>
+</html>
